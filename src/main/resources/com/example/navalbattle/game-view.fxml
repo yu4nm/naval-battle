@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="443.0" prefWidth="668.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.navalbattle.controller.setGameController">
+   <children>
+      <GridPane fx:id="userBoard" gridLinesVisible="true" layoutX="40.0" layoutY="31.0" prefHeight="223.0" prefWidth="235.0" style="-fx-background-color: cyan;">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+      </GridPane>
+      <GridPane fx:id="computerBoard" gridLinesVisible="true" layoutX="284.0" layoutY="31.0" prefHeight="223.0" prefWidth="235.0" style="-fx-background-color: cyan;" visible="false">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+      </GridPane>
+      <Text fontSmoothingType="LCD" layoutX="43.0" layoutY="280.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ubica tus barcos" wrappingWidth="151.8134765625">
+         <font>
+            <Font name="Lucida Console" size="15.0" />
+         </font>
+      </Text>
+       <Button layoutX="37.0" layoutY="294.0" mnemonicParsing="false" onAction="#previewPortaaviones" prefHeight="25.0" prefWidth="90.0" text="Portaaviones">
+           
+       </Button>
+      <Button layoutX="42.0" layoutY="325.0" mnemonicParsing="false" onAction="#previewSubmarino" prefHeight="25.0" prefWidth="83.0" text="Submarinos" />
+      <Button layoutX="42.0" layoutY="357.0" mnemonicParsing="false" onAction="#previewDestructor" text="Destructores" />
+      <Button layoutX="41.0" layoutY="389.0" mnemonicParsing="false" onAction="#PreviewFragata" prefHeight="25.0" prefWidth="84.0" text="Fragatas" />
+      <TextField fx:id="portaavionescant" alignment="CENTER" editable="false" layoutX="135.0" layoutY="294.0" prefHeight="25.0" prefWidth="37.0" text="1" />
+      <TextField fx:id="submarinoscant" alignment="CENTER" editable="false" layoutX="135.0" layoutY="325.0" prefHeight="25.0" prefWidth="37.0" text="2" />
+      <TextField fx:id="destructorescant" alignment="CENTER" editable="false" layoutX="135.0" layoutY="357.0" prefHeight="25.0" prefWidth="37.0" text="3" />
+      <TextField fx:id="fragatascant" alignment="CENTER" editable="false" layoutX="135.0" layoutY="389.0" prefHeight="25.0" prefWidth="37.0" text="4" />
+      <Button layoutX="376.0" layoutY="338.0" mnemonicParsing="false" onAction="#onButtonPressedStartGame" text="COMENZAR" />
+   </children>
+</Pane>
