@@ -59,6 +59,28 @@ public class setGameController {
         funcioncita(3);
     }
 
+    @FXML
+    void onButtonPressedAtack(ActionEvent event) {
+        attack();
+        /*Rectangle attackv;
+        attackv = new Rectangle(23.5, 22.3);
+        attackv.setFill(Color.PALEGREEN);
+        attackv.setOpacity(0.5);
+        userBoard.add(attackv,4,4);
+
+        userBoard.setOnMouseMoved(event -> {
+            double mouseX = event.getX();
+            double mouseY = event.getY();
+
+            int column = (int) (mouseX / (userBoard.getWidth() / userBoard.getColumnCount()));
+            int row = (int) (mouseY / (userBoard.getHeight() / userBoard.getRowCount()));
+
+            GridPane.setColumnIndex(attackv, column);
+            GridPane.setRowIndex(attackv, row);
+        });*/
+
+    }
+
     void funcioncita(int typeBoat){
 
         Boat boat = new Boat(typeBoat);
@@ -87,6 +109,24 @@ public class setGameController {
         });
 
         userBoard.requestFocus();
+    }
+    void attack(){
+        Rectangle attackv;
+        attackv = new Rectangle(23.5, 22.3);
+        attackv.setFill(Color.RED);
+        attackv.setOpacity(0.5);
+        userBoard.add(attackv,4,4);
+
+        userBoard.setOnMouseMoved(event -> {
+            double mouseX = event.getX();
+            double mouseY = event.getY();
+
+            int column = (int) (mouseX / (userBoard.getWidth() / userBoard.getColumnCount()));
+            int row = (int) (mouseY / (userBoard.getHeight() / userBoard.getRowCount()));
+
+            GridPane.setColumnIndex(attackv, column);
+            GridPane.setRowIndex(attackv, row);
+        });
     }
 
 }
