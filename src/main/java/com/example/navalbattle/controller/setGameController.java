@@ -3,6 +3,8 @@ package com.example.navalbattle.controller;
 import com.example.navalbattle.model.Boat;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.TextField;
@@ -61,7 +63,7 @@ public class setGameController {
 
     @FXML
     void onButtonPressedAtack(ActionEvent event) {
-        attack();
+        playerAttack();
         /*Rectangle attackv;
         attackv = new Rectangle(23.5, 22.3);
         attackv.setFill(Color.PALEGREEN);
@@ -110,23 +112,41 @@ public class setGameController {
 
         userBoard.requestFocus();
     }
-    void attack(){
+    void playerAttack(){
         Rectangle attackv;
         attackv = new Rectangle(23.5, 22.3);
         attackv.setFill(Color.RED);
         attackv.setOpacity(0.5);
-        userBoard.add(attackv,4,4);
+        computerBoard.add(attackv,4,4);
 
-        userBoard.setOnMouseMoved(event -> {
+        computerBoard.setOnMouseMoved(event -> {
             double mouseX = event.getX();
             double mouseY = event.getY();
 
-            int column = (int) (mouseX / (userBoard.getWidth() / userBoard.getColumnCount()));
-            int row = (int) (mouseY / (userBoard.getHeight() / userBoard.getRowCount()));
+            int column = (int) (mouseX / (computerBoard.getWidth() / computerBoard.getColumnCount()));
+            int row = (int) (mouseY / (computerBoard.getHeight() / computerBoard.getRowCount()));
 
             GridPane.setColumnIndex(attackv, column);
             GridPane.setRowIndex(attackv, row);
         });
+        computerBoard.setOnMouseClicked(event -> {
+            double mouseX = event.getX();
+            double mouseY = event.getY();
+
+            int column = (int) (mouseX / (computerBoard.getWidth() / computerBoard.getColumnCount()));
+            int row = (int) (mouseY / (computerBoard.getHeight() / computerBoard.getRowCount()));
+
+            Image image = new Image("/com/example/navalbattle/images/equis.jpg");
+            ImageView imageView = new ImageView(image);
+
+            computerBoard.add(imageView, column, row);
+
+            System.out.println(column + row);
+
+        });
+    }
+    void computerAttack(){
+
     }
 
 }
