@@ -79,6 +79,6 @@
       <TextField fx:id="destructorsNum" alignment="CENTER" editable="false" layoutX="135.0" layoutY="357.0" prefHeight="25.0" prefWidth="37.0" text="3" />
       <TextField fx:id="frigatesNum" alignment="CENTER" editable="false" layoutX="135.0" layoutY="389.0" prefHeight="25.0" prefWidth="37.0" text="4" />
       <Button layoutX="376.0" layoutY="338.0" mnemonicParsing="false" onAction="#onButtonPressedStartGame" text="COMENZAR" />
-      <Button layoutX="479.0" layoutY="338.0" mnemonicParsing="false" onAction="#onButtonPressedAtack" text="atack" />
+      <Button fx:id="atackButton" layoutX="474.0" layoutY="338.0" mnemonicParsing="false" onAction="#onButtonPressedAtack" prefHeight="25.0" prefWidth="49.0" text="atack" visible="false" />
    </children>
 </Pane>

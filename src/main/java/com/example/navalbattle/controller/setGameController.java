@@ -5,11 +5,13 @@ import com.example.navalbattle.model.ComputerBoard;
 import com.example.navalbattle.model.userBoard;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import static java.lang.Integer.parseInt;
@@ -35,8 +37,13 @@ public class setGameController {
     private GridPane userBoard;
 
     @FXML
+    private Button atackButton;
+
+
+    @FXML
     void onButtonPressedStartGame(ActionEvent event) {
         computerBoard.setVisible(true);
+        atackButton.setVisible(true);
         // Codigo para que ponga los barcos de la computadora y que active el metodo de jugar si
         // el metodo que determina si se gano o no aun no halla dado un resultado
 
@@ -83,6 +90,11 @@ public class setGameController {
         }
     }
 
+    @FXML
+    void onButtonPressedAtack(ActionEvent event) {
+        playerAttack();
+
+    }
     void setUserBoats(int typeBoat){
 
         Boat boat = new Boat(typeBoat);
@@ -151,17 +163,23 @@ public class setGameController {
             int column = (int) (mouseX / (computerBoard.getWidth() / computerBoard.getColumnCount()));
             int row = (int) (mouseY / (computerBoard.getHeight() / computerBoard.getRowCount()));
 
-            Image image = new Image("/com/example/navalbattle/images/equis.jpg");
-            ImageView imageView = new ImageView(image);
+            //Image image = new Image("/com/example/navalbattle/images/equis.jpg");
+            //ImageView imageView = new ImageView(image);
 
-            computerBoard.add(imageView, column, row);
+            //computerBoard.add(imageView, column, row);
+            computerBoard.setOnMouseMoved(null);
+            computerBoard.setOnKeyPressed(null);
 
             System.out.println(column + row);
 
         });
     }
     void computerAttack(){
+        int randomAttackC = (int) (Math.random() * 10) ;
+        int column = randomAttackC;
 
+        int randomAttackR = (int) (Math.random() * 10) ;
+        int row = randomAttackR;
     }
 
     public void decreaseBoatCount(int typeBoat, GridPane gridPane){
@@ -178,5 +196,9 @@ public class setGameController {
             textField.setText(Integer.toString(currentCount));
         }
     }
-}
+    public void stateOfShots(int column, int row) {
+
+    }
+    }
+
 

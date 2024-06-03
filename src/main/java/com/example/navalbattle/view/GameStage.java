@@ -16,6 +16,7 @@ public class GameStage extends Stage {
         setResizable(false);
         setScene(scene);
         show();
+
     }
 
     public static GameStage getInstance() throws IOException{
