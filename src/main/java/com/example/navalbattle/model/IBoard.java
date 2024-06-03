@@ -11,30 +11,29 @@ public interface IBoard {
     }
 
 
-    default boolean canPlaceBoat(int row, int col, Boat boat, int[][] board) {
-        //Hacer uso de excepciones en este codigo
-        int boatLength = boat.getBoatLength();
-        if (boat.getIsHorizontal()) {
-            if (col + boatLength > board[0].length) {
-                return false; // Boat goes out of bounds horizontally
-            }
-            for (int i = col; i < col + boatLength; i++) {
-                if (board[row][i] != 0) {
-                    return false; // Space is already occupied
-                }
-            }
-        } else {
-            if (row + boatLength > board.length) {
-                return false; // Boat goes out of bounds vertically
-            }
-            for (int j = row; j < row + boatLength; j++) {
-                if (board[j][col] != 0) {
-                    return false; // Space is already occupied
-                }
-            }
-        }
-        return true;
-    }
+//    default boolean canPlaceBoat(int row, int col, Boat boat, int[][] board) throws OutOfBondsException, PositionOccupiedException{
+//        int boatLength = boat.getBoatLength();
+//        if (boat.getIsHorizontal()) {
+//            if (col + boatLength > board[0].length) {
+//                throw new OutOfBondsException("Boat goes out of bounds horizontally");
+//            }
+//            for (int i = col; i < col + boatLength; i++) {
+//                if (board[row][i] != 0) {
+//                    throw new PositionOccupiedException("Space is already occupied");
+//                }
+//            }
+//        } else {
+//            if (row + boatLength > board.length) {
+//                throw new OutOfBondsException("Boat goes out of bounds vertically");
+//            }
+//            for (int j = row; j < row + boatLength; j++) {
+//                if (board[j][col] != 0) {
+//                    throw  new PositionOccupiedException("Space is already occupied");
+//                }
+//            }
+//        }
+//        return true;
+//    }
 
     default void printUserTable(int[][] userBoard){
         for(int i = 0; i < userBoard.length; i++){

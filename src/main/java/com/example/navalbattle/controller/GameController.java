@@ -3,6 +3,7 @@ package com.example.navalbattle.controller;
 import com.example.navalbattle.model.Boat;
 import com.example.navalbattle.model.ComputerBoard;
 import com.example.navalbattle.model.userBoard;
+import com.example.navalbattle.view.alert.AlertBox;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
@@ -39,10 +40,11 @@ public class GameController {
     @FXML
     void onButtonPressedStartGame(ActionEvent event) {
         computerBoard.setVisible(true);
-//        computerBoardM.printUserTable(computerBoardM.getComputerBoard());
+        computerBoardM.printUserTable(computerBoardM.getComputerBoard());
     }
 
     // General note: fix problem on double click at the buttons
+    // General note: fix bug when you try to put a boat outside the GridPane
 
     @FXML
     void PreviewFrigate(ActionEvent event) {
@@ -85,7 +87,6 @@ public class GameController {
 
             if (userBoardM.getUserBoard()[row][column] != 0){
                 boatPreview.setFill(Color.RED);
-                //Codigo para que no lo deje ubicar
             }
 
             onKeyPressed(userBoard, column, row, boat);
@@ -100,12 +101,13 @@ public class GameController {
                 boat.rotateBoat();
             }
             if (event.getCode() == KeyCode.ENTER) {
-                userBoardM.setBoatPosition(row, column, boat);
-                userBoardM.printUserTable(userBoardM.getUserBoard());
-                boat.getBoat().setOpacity(1.0);
-                userBoard.setOnMouseMoved(null);
-                userBoard.setOnKeyPressed(null);
-                decreaseBoatCount(boat.getTypeBoat(), userBoard);
+                if (userBoardM.setBoatPosition(row, column, boat)){
+                    userBoardM.printUserTable(userBoardM.getUserBoard());
+                    boat.getBoat().setOpacity(1.0);
+                    userBoard.setOnMouseMoved(null);
+                    userBoard.setOnKeyPressed(null);
+                    decreaseBoatCount(boat.getTypeBoat(), userBoard);
+                }
             }
         });
 
@@ -116,7 +118,8 @@ public class GameController {
             setUserBoats(typeBoat);
         }
         else{
-            System.out.println("No tienes mas barcos que ubicar");
+            AlertBox alertBox = new AlertBox();
+            alertBox.showMessage("Error", "No more boats of this type");
         }
     }
 
