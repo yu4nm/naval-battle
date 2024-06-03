@@ -1,5 +1,5 @@
 package com.example.navalbattle;
-import com.example.navalbattle.view.setGameStage;
+import com.example.navalbattle.view.GameStage;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -13,6 +13,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        setGameStage.getInstance();
+        GameStage.getInstance();
     }
 }

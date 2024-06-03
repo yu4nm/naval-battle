@@ -7,8 +7,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class setGameStage extends Stage {
-    public setGameStage() throws IOException{
+public class GameStage extends Stage {
+    public GameStage() throws IOException{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/navalbattle/game-view.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
@@ -18,8 +18,8 @@ public class setGameStage extends Stage {
         show();
     }
 
-    public static setGameStage getInstance() throws IOException{
-        return setGameStageHolder.INSTANCE = new setGameStage();
+    public static GameStage getInstance() throws IOException{
+        return setGameStageHolder.INSTANCE = new GameStage();
     }
 
     public static void deleteInstance() {
@@ -28,7 +28,7 @@ public class setGameStage extends Stage {
     }
 
     private static class setGameStageHolder {
-        private static setGameStage INSTANCE;
+        private static GameStage INSTANCE;
     }
 
 }

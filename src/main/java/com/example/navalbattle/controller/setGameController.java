@@ -1,6 +1,8 @@
 package com.example.navalbattle.controller;
 
 import com.example.navalbattle.model.Boat;
+import com.example.navalbattle.model.ComputerBoard;
+import com.example.navalbattle.model.userBoard;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
@@ -8,28 +10,26 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class setGameController {
+import static java.lang.Integer.parseInt;
 
-    Rectangle previewBoat;
+public class setGameController {
 
     @FXML
     private GridPane computerBoard;
 
     @FXML
-    private TextField destructorescant;
+    private TextField destructorsNum;
 
     @FXML
-    private TextField fragatascant;
+    private TextField frigatesNum;
 
     @FXML
-    private TextField portaavionescant;
+    private TextField aircraftCarrierNum;
 
     @FXML
-    private TextField submarinoscant;
+    private TextField submarinesNum;
 
     @FXML
     private GridPane userBoard;
@@ -37,53 +37,53 @@ public class setGameController {
     @FXML
     void onButtonPressedStartGame(ActionEvent event) {
         computerBoard.setVisible(true);
+        // Codigo para que ponga los barcos de la computadora y que active el metodo de jugar si
+        // el metodo que determina si se gano o no aun no halla dado un resultado
 
     }
 
 
     @FXML
     void PreviewFragata(ActionEvent event) {
-        funcioncita(1);
+        if(parseInt(frigatesNum.getText()) > 0) {
+            setUserBoats(1);
+        }
+        else{
+            System.out.println("No tienes mas barcos que ubicar");
+        }
     }
+
 
     @FXML
     void previewDestructor(ActionEvent event) {
-        funcioncita(2);
-    }
+        if(parseInt(destructorsNum.getText()) > 0) {
+            setUserBoats(2);
+        }
+        else{
+            System.out.println("No tienes mas barcos que ubicar");
+        }    }
 
     @FXML
     void previewPortaaviones(ActionEvent event) {
-        funcioncita(4);
+        if(parseInt(aircraftCarrierNum.getText()) > 0) {
+            setUserBoats(4);
+        }
+        else{
+            System.out.println("No tienes mas barcos que ubicar");
+        }
     }
 
     @FXML
     void previewSubmarino(ActionEvent event) {
-        funcioncita(3);
+        if(parseInt(submarinesNum.getText()) > 0) {
+            setUserBoats(3);
+        }
+        else{
+            System.out.println("No tienes mas barcos que ubicar");
+        }
     }
 
-    @FXML
-    void onButtonPressedAtack(ActionEvent event) {
-        playerAttack();
-        /*Rectangle attackv;
-        attackv = new Rectangle(23.5, 22.3);
-        attackv.setFill(Color.PALEGREEN);
-        attackv.setOpacity(0.5);
-        userBoard.add(attackv,4,4);
-
-        userBoard.setOnMouseMoved(event -> {
-            double mouseX = event.getX();
-            double mouseY = event.getY();
-
-            int column = (int) (mouseX / (userBoard.getWidth() / userBoard.getColumnCount()));
-            int row = (int) (mouseY / (userBoard.getHeight() / userBoard.getRowCount()));
-
-            GridPane.setColumnIndex(attackv, column);
-            GridPane.setRowIndex(attackv, row);
-        });*/
-
-    }
-
-    void funcioncita(int typeBoat){
+    void setUserBoats(int typeBoat){
 
         Boat boat = new Boat(typeBoat);
         Rectangle boatPreview = boat.getBoat();
@@ -92,25 +92,40 @@ public class setGameController {
 
         userBoard.setOnMouseMoved(event -> {
             double mouseX = event.getX();
-            double mouseY = event.getY();
+            double mouseY = event.getY  ();
 
             int column = (int) (mouseX / (userBoard.getWidth() / userBoard.getColumnCount()));
             int row = (int) (mouseY / (userBoard.getHeight() / userBoard.getRowCount()));
 
+
             GridPane.setColumnIndex(boatPreview, column);
             GridPane.setRowIndex(boatPreview, row);
+
+            // Poner con un if que si esta pasando el mouse por encima de otro
+            // barco ya ubicado se ponga en rojo y no lo deje ubicar ademas de no poder ubicarlo
+
+            onKeyPressed(userBoard, row, column, boat);
         });
 
+        userBoard.requestFocus();
+    }
+
+    private void onKeyPressed(GridPane userBoard, int column, int row, Boat boat){
         userBoard.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.R) {
                 boat.rotateBoat();
             }
             if (event.getCode() == KeyCode.ENTER) {
-                //Codigo para que ponga el bote en ese lugar
+                userBoard userBoardM = new userBoard();
+                userBoardM.setBoatUbication(row, column, boat);
+
+                boat.getBoat().setOpacity(1.0);
+                userBoard.setOnMouseMoved(null);
+                userBoard.setOnKeyPressed(null);
+                decreaseBoatCount(boat.getTypeBoat(), userBoard);
             }
         });
 
-        userBoard.requestFocus();
     }
     void playerAttack(){
         Rectangle attackv;
@@ -149,5 +164,19 @@ public class setGameController {
 
     }
 
+    public void decreaseBoatCount(int typeBoat, GridPane gridPane){
+        TextField textField = switch (typeBoat) {
+            case 1 -> frigatesNum;
+            case 2 -> destructorsNum;
+            case 3 -> submarinesNum;
+            case 4 -> aircraftCarrierNum;
+            default -> null;
+        };
+        int currentCount = parseInt(textField.getText());
+        if (currentCount > 0) {
+            currentCount--;
+            textField.setText(Integer.toString(currentCount));
+        }
+    }
 }
 
