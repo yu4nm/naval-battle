@@ -5,33 +5,33 @@ import javafx.scene.shape.Rectangle;
 
 public class Boat {
 
+    int boatLength;
     int typeBoat;
     Rectangle boat;
-    boolean isHorizontal;
+    boolean isHorizontal = true;
     public Boat(int typeBoat) {
+        this.boat = new Rectangle(23.5*typeBoat,22.3);
+        this.typeBoat = typeBoat;
+        this.boatLength = typeBoat;
         switch (typeBoat) {
             case 1: //Frigate
-                this.boat = new Rectangle(23.5, 22.3);
                 this.boat.setFill(Color.PALEGREEN);
-                this.typeBoat = typeBoat;
                 break;
             case 2: //Destructor
-                this.boat = new Rectangle(47, 22.3);
                 this.boat.setFill(Color.SILVER);
-                this.typeBoat = typeBoat;
                 break;
             case 3: //Submarine
-                this.boat = new Rectangle(70.5, 22.3);
                 this.boat.setFill(Color.BLUEVIOLET);
-                this.typeBoat = typeBoat;
                 break;
             case 4: //Aircraft Carrier
-                this.boat = new Rectangle(94, 22.3);
                 this.boat.setFill(Color.GOLD);
-                this.typeBoat = typeBoat;
                 break;
 
         }
+    }
+
+    public int getBoatLength() {
+        return boatLength;
     }
 
     public Rectangle getBoat(){

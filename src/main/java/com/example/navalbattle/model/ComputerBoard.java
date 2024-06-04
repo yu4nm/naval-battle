@@ -1,46 +1,34 @@
 package com.example.navalbattle.model;
 
-public class ComputerBoard {
-    private int[][] computerBoard;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ComputerBoard implements IBoard{
+    int frigatesCant = 3;
+    int submarinesNum = 1;
+    int aircraftCarrierNum = 1;
+    int destructorsNum = 2;
+
+    List<Integer> boatsInventory = new ArrayList<>();
+
+    private int[][] computerBoard = new int[10][10];
 
     public ComputerBoard() {
-        this.computerBoard = new int[][]{
-                {0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 3, 3, 3, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 2, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 2, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-        };
+
+        boatsInventory.add(frigatesCant);
+        boatsInventory.add(destructorsNum);
+        boatsInventory.add(submarinesNum);
+        boatsInventory.add(aircraftCarrierNum);
+
+        initializeBoard(computerBoard);
     }
+
+
+
     public int[][] getComputerBoard() {
         return computerBoard;
     }
 
 
 }
-
-
-//    public void setComputerBoard(){
-//        int frigatesNum, submarinesNum, aircraftCarrierNum, destructorsNum;
-//        frigatesNum = 3;
-//        submarinesNum = 1;
-//        aircraftCarrierNum = 1;
-//        destructorsNum = 2;
-//        int col = (int)(Math.random() * computerBoard.length);
-//        int row = (int)(Math.random() * computerBoard.length);
-//        for (int i = 0; i < 10; i++) {
-//            for (int j = 0; j < 10; j++) {
-//                if (computerBoard[row][col] == 0){
-//                    int typeBoat = (int)(Math.random() * 4);
-//                    Boat boat = new Boat(typeBoat);
-//
-//                }
-//            }
-//        }
-//    }
-
 
