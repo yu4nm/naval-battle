@@ -183,7 +183,7 @@ public class GameController {
 
 
             stateOfShots(column, row, computerBoardM.getComputerBoard(), player,userBoardM.getUserBoard());
-
+            attackv.setOpacity(0);
 
 
         });
@@ -205,7 +205,7 @@ public class GameController {
             row = randomAttackR;
         }
         stateOfShots(column, row, computerBoardM.getComputerBoard(), player, userBoardM.getUserBoard());
-        showHitImage(column, row, player);
+       // showHitImage(column, row, player);
     }
 
     public void previewBoat(int typeBoat, TextField boatCountField){
@@ -233,37 +233,33 @@ public class GameController {
         }
     }
     public void stateOfShots(int column, int row, int[][] computerBoard, int player, int[][] userBoard) {
-        switch (player){
+        switch (player) {
             case 1:
-                if((computerBoardM.getComputerBoard()[row][column]) == 0){
+                if (computerBoard[row][column] == 0) {
                     computerBoard[row][column] = 5;
-                    showHitImage(column,row, player);
+                    showHitImage(column, row, player);
                     computerAttack();
+                } else if (computerBoard[row][column] > 0 && computerBoard[row][column] < 5) {
+                    computerBoard[row][column] = 5;
+                    showFireImage(column, row, player);
+                    playerAttack();
 
-
-                }else if((computerBoardM.getComputerBoard()[row][column]) > 0 && computerBoardM.getComputerBoard()[row][column] < 5){
-                    showFireImage(column,row,player);
-                    computerAttack();
+                } else {
+                    AlertBox alertBox = new AlertBox();
+                    alertBox.showMessage("Error", "YA DISPARASTE AHI");
                 }
-                else{
-                    System.out.println("ya disparaste ahi");
-                }
-
+                break;
             case 2:
-                if((userBoardM.getUserBoard()[row][column]) == 0){
+                if (userBoard[row][column] == 0) {
                     userBoard[row][column] = 5;
-                    showHitImage(column,row, player);
-
-
-
-                }else if((userBoardM.getUserBoard()[row][column]) > 0 && userBoardM.getUserBoard()[row][column] < 5){
-                    showFireImage(column,row,player);
+                    showHitImage(column, row, player);
+                } else if (userBoard[row][column] > 0 && userBoard[row][column] < 5) {
+                    userBoard[row][column] = 5;
+                    showFireImage(column, row, player);
+                    computerAttack();
                 }
-
-
-
+                break;
         }
-
     }
     private void showHitImage(int column, int row, int player) {
         ImageView hitView = new ImageView(hitImage);
