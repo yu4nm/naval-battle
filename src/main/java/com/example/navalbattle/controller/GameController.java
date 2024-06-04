@@ -6,18 +6,27 @@ import com.example.navalbattle.model.userBoard;
 import com.example.navalbattle.view.alert.AlertBox;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 import static java.lang.Integer.parseInt;
 
 public class GameController {
+    Collection<Node> elementsToKeep = new ArrayList<>();
 
     userBoard userBoardM = new userBoard();
     ComputerBoard computerBoardM = new ComputerBoard();
+
+    @FXML
+    private Pane mainWindow;
 
     @FXML
     private GridPane computerBoard;
@@ -39,7 +48,11 @@ public class GameController {
 
     @FXML
     void onButtonPressedStartGame(ActionEvent event) {
+        elementsToKeep.add(userBoard);
+        elementsToKeep.add(computerBoard);
+        mainWindow.getChildren().retainAll(elementsToKeep);
         computerBoard.setVisible(true);
+        computerBoardM.setComputerBoard();
         computerBoardM.printUserTable(computerBoardM.getComputerBoard());
     }
 

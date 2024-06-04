@@ -10,31 +10,6 @@ public interface IBoard {
         }
     }
 
-
-//    default boolean canPlaceBoat(int row, int col, Boat boat, int[][] board) throws OutOfBondsException, PositionOccupiedException{
-//        int boatLength = boat.getBoatLength();
-//        if (boat.getIsHorizontal()) {
-//            if (col + boatLength > board[0].length) {
-//                throw new OutOfBondsException("Boat goes out of bounds horizontally");
-//            }
-//            for (int i = col; i < col + boatLength; i++) {
-//                if (board[row][i] != 0) {
-//                    throw new PositionOccupiedException("Space is already occupied");
-//                }
-//            }
-//        } else {
-//            if (row + boatLength > board.length) {
-//                throw new OutOfBondsException("Boat goes out of bounds vertically");
-//            }
-//            for (int j = row; j < row + boatLength; j++) {
-//                if (board[j][col] != 0) {
-//                    throw  new PositionOccupiedException("Space is already occupied");
-//                }
-//            }
-//        }
-//        return true;
-//    }
-
     default void printUserTable(int[][] userBoard){
         for(int i = 0; i < userBoard.length; i++){
             for(int j = 0; j < userBoard.length; j++){
@@ -44,16 +19,16 @@ public interface IBoard {
         }
     }
 
-    default void placeBoat(Boat boat, int row, int col, int[][] userBoard){
+    default void placeBoat(Boat boat, int row, int col, int[][] board){
         int typeBoat = boat.getTypeBoat();
         int boatLength = boat.getBoatLength();
         if (boat.getIsHorizontal()) {
             for (int i = col; i < col + boatLength; i++) {
-                userBoard[row][i] = typeBoat;
+                board[row][i] = typeBoat;
             }
         } else {
             for (int j = row; j < row + boatLength; j++) {
-                userBoard[j][col] = typeBoat;
+                board[j][col] = typeBoat;
             }
         }
     }

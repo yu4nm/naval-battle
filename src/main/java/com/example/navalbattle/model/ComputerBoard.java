@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ComputerBoard implements IBoard{
-    int frigatesCant = 3;
-    int submarinesNum = 1;
+    int frigatesCant = 4;
+    int destructorsNum = 3;
+    int submarinesNum = 2;
     int aircraftCarrierNum = 1;
-    int destructorsNum = 2;
 
     List<Integer> boatsInventory = new ArrayList<>();
 
@@ -23,8 +23,25 @@ public class ComputerBoard implements IBoard{
         initializeBoard(computerBoard);
     }
 
-    public void setComputerBoard(){
+    public void setComputerBoard() {
+        for (int i = 0; i < boatsInventory.size(); i++) {
+            for (int j = 0; j < boatsInventory.get(i); j++) {
+                boolean boatPlaced = false;
+                while (!boatPlaced) {
+                    int column = (int) (Math.random() * computerBoard.length);
+                    int row = (int) (Math.random() * computerBoard.length);
+                    int isHorizontal = (int) (Math.random() * 2);
+                    Boat boat = new Boat(i+1);
+                    boat.setIsHorizontal(isHorizontal);
+                    if (canPlaceBoat(row, column, boat)) {
+                        placeBoat(boat, row, column, computerBoard);
+                        boatPlaced = true;
+                    }
+                }
+            }
+        }
     }
+
 
     boolean canPlaceBoat(int row, int col, Boat boat){
         int boatLength = boat.getBoatLength();
