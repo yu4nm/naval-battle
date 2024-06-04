@@ -42,6 +42,12 @@ public class GameController {
     @FXML
     private Button atackButton;
 
+    private Image hitImage;
+
+    @FXML
+    void initialize() {
+        hitImage = new Image(getClass().getResource("/com/example/navalbattle/images/hit.png").toExternalForm());
+    }
 
     @FXML
     void onButtonPressedStartGame(ActionEvent event) {
@@ -158,7 +164,7 @@ public class GameController {
             computerBoard.setOnMouseMoved(null);
             computerBoard.setOnMouseClicked(null);
             int player = 1;
-            int fakeint = 0;
+
 
             stateOfShots(column, row, computerBoardM.getComputerBoard(), player,userBoardM.getUserBoard());
 
@@ -167,8 +173,8 @@ public class GameController {
         });
     }
     void computerAttack(){
-        int player = 0;
-        int fakeint = 0;
+        int player = 2;
+
         int randomAttackC = (int) (Math.random() * 10) ;
         int column = randomAttackC;
 
@@ -176,9 +182,14 @@ public class GameController {
         int row = randomAttackR;
 
         while(userBoardM.getUserBoard()[row][column] == 5){
-            computerAttack();
+            randomAttackC = (int) (Math.random() * 10);
+            column = randomAttackC;
+
+            randomAttackR = (int) (Math.random() * 10);
+            row = randomAttackR;
         }
         stateOfShots(column, row, computerBoardM.getComputerBoard(), player, userBoardM.getUserBoard());
+        showHitImage(column, row, player);
     }
 
     public void previewBoat(int typeBoat, TextField boatCountField){
@@ -206,13 +217,12 @@ public class GameController {
     }
     public void stateOfShots(int column, int row, int[][] computerBoard, int player, int[][] userBoard) {
         switch (player){
-            case 0:
+            case 1:
                 if((computerBoardM.getComputerBoard()[row][column]) == 0){
                     computerBoard[row][column] = 5;
-                    Image image = new Image("/com/example/navalbattle/images/hit.png");
-                    ImageView imageView = new ImageView(image);
 
-                    //computerBoard.add(imageView, column, row);
+
+
                 }else if((computerBoardM.getComputerBoard()[row][column]) > 0 && computerBoardM.getComputerBoard()[row][column] < 5){
                     //funcion de dañar al barco
                 }
@@ -220,13 +230,12 @@ public class GameController {
                     System.out.println("ya disparaste ahi");
                 }
                 computerAttack();
-            case 1:
+            case 2:
                 if((userBoardM.getUserBoard()[row][column]) == 0){
                     userBoard[row][column] = 5;
-                    Image image = new Image("/com/example/navalbattle/images/hit.png");
-                    ImageView imageView = new ImageView(image);
 
-                    //computerBoard.add(imageView, column, row);
+
+
                 }else if((userBoardM.getUserBoard()[row][column]) > 0 && userBoardM.getUserBoard()[row][column] < 5){
                     //funcion de dañar al barco
                 }
@@ -234,7 +243,17 @@ public class GameController {
 
 
         }
-
+        showHitImage(column,row, player);
+    }
+    private void showHitImage(int column, int row, int player) {
+        ImageView hitView = new ImageView(hitImage);
+        hitView.setFitWidth(23.5);
+        hitView.setFitHeight(22.3);
+        if (player == 1) {
+            computerBoard.add(hitView, column, row);
+        } else {
+            userBoard.add(hitView, column, row);
+        }
     }
 
     }
