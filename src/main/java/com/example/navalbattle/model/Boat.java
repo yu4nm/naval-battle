@@ -59,4 +59,11 @@ public class Boat {
         return isHorizontal;
     }
 
+    public void setIsHorizontal(int isHorizontal){
+        if (isHorizontal == 1){
+            this.isHorizontal = true;
+        } else if (isHorizontal == 0) {
+            this.isHorizontal = false;
+        }
+    }
 }

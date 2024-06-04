@@ -3,23 +3,33 @@ package com.example.navalbattle.controller;
 import com.example.navalbattle.model.Boat;
 import com.example.navalbattle.model.ComputerBoard;
 import com.example.navalbattle.model.userBoard;
+import com.example.navalbattle.view.alert.AlertBox;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 import static java.lang.Integer.parseInt;
 
 public class GameController {
+    Collection<Node> elementsToKeep = new ArrayList<>();
 
     userBoard userBoardM = new userBoard();
     ComputerBoard computerBoardM = new ComputerBoard();
+
+    @FXML
+    private Pane mainWindow;
 
     @FXML
     private GridPane computerBoard;
@@ -42,24 +52,31 @@ public class GameController {
     @FXML
     private Button atackButton;
 
-    private Image hitImage;
+    private Image hitImage, fireImage;
 
     @FXML
     void initialize() {
+        fireImage = new Image(getClass().getResource("/com/example/navalbattle/images/fire.png").toExternalForm());
         hitImage = new Image(getClass().getResource("/com/example/navalbattle/images/hit.png").toExternalForm());
     }
 
     @FXML
     void onButtonPressedStartGame(ActionEvent event) {
+        elementsToKeep.add(userBoard);
+        elementsToKeep.add(computerBoard);
+        elementsToKeep.add(atackButton);
+        mainWindow.getChildren().retainAll(elementsToKeep);
         computerBoard.setVisible(true);
+        computerBoardM.setComputerBoard();
+        computerBoardM.printUserTable(computerBoardM.getComputerBoard());
 //        computerBoardM.printUserTable(computerBoardM.getComputerBoard());
         atackButton.setVisible(true);
-        // Codigo para que ponga los barcos de la computadora y que active el metodo de jugar si
-        // el metodo que determina si se gano o no aun no halla dado un resultado
+
 
     }
 
     // General note: fix problem on double click at the buttons
+    // General note: fix bug when you try to put a boat outside the GridPane
 
     @FXML
     void PreviewFrigate(ActionEvent event) {
@@ -107,7 +124,6 @@ public class GameController {
 
             if (userBoardM.getUserBoard()[row][column] != 0){
                 boatPreview.setFill(Color.RED);
-                //Codigo para que no lo deje ubicar
             }
 
             onKeyPressed(userBoard, column, row, boat);
@@ -122,12 +138,13 @@ public class GameController {
                 boat.rotateBoat();
             }
             if (event.getCode() == KeyCode.ENTER) {
-                userBoardM.setBoatPosition(row, column, boat);
-                userBoardM.printUserTable(userBoardM.getUserBoard());
-                boat.getBoat().setOpacity(1.0);
-                userBoard.setOnMouseMoved(null);
-                userBoard.setOnKeyPressed(null);
-                decreaseBoatCount(boat.getTypeBoat(), userBoard);
+                if (userBoardM.setBoatPosition(row, column, boat)){
+                    userBoardM.printUserTable(userBoardM.getUserBoard());
+                    boat.getBoat().setOpacity(1.0);
+                    userBoard.setOnMouseMoved(null);
+                    userBoard.setOnKeyPressed(null);
+                    decreaseBoatCount(boat.getTypeBoat(), userBoard);
+                }
             }
         });
 
@@ -157,10 +174,9 @@ public class GameController {
             int column = (int) (mouseX / (computerBoard.getWidth() / computerBoard.getColumnCount()));
             int row = (int) (mouseY / (computerBoard.getHeight() / computerBoard.getRowCount()));
 
-            //Image image = new Image("/com/example/navalbattle/images/hit.png");
-            //ImageView imageView = new ImageView(image);
 
-            //computerBoard.add(imageView, column, row);
+
+
             computerBoard.setOnMouseMoved(null);
             computerBoard.setOnMouseClicked(null);
             int player = 1;
@@ -168,7 +184,7 @@ public class GameController {
 
             stateOfShots(column, row, computerBoardM.getComputerBoard(), player,userBoardM.getUserBoard());
 
-            System.out.println("bruh");
+
 
         });
     }
@@ -197,7 +213,8 @@ public class GameController {
             setUserBoats(typeBoat);
         }
         else{
-            System.out.println("No tienes mas barcos que ubicar");
+            AlertBox alertBox = new AlertBox();
+            alertBox.showMessage("Error", "No more boats of this type");
         }
     }
 
@@ -220,30 +237,33 @@ public class GameController {
             case 1:
                 if((computerBoardM.getComputerBoard()[row][column]) == 0){
                     computerBoard[row][column] = 5;
-
+                    showHitImage(column,row, player);
+                    computerAttack();
 
 
                 }else if((computerBoardM.getComputerBoard()[row][column]) > 0 && computerBoardM.getComputerBoard()[row][column] < 5){
-                    //funcion de dañar al barco
+                    showFireImage(column,row,player);
+                    computerAttack();
                 }
                 else{
                     System.out.println("ya disparaste ahi");
                 }
-                computerAttack();
+
             case 2:
                 if((userBoardM.getUserBoard()[row][column]) == 0){
                     userBoard[row][column] = 5;
+                    showHitImage(column,row, player);
 
 
 
                 }else if((userBoardM.getUserBoard()[row][column]) > 0 && userBoardM.getUserBoard()[row][column] < 5){
-                    //funcion de dañar al barco
+                    showFireImage(column,row,player);
                 }
 
 
 
         }
-        showHitImage(column,row, player);
+
     }
     private void showHitImage(int column, int row, int player) {
         ImageView hitView = new ImageView(hitImage);
@@ -253,6 +273,16 @@ public class GameController {
             computerBoard.add(hitView, column, row);
         } else {
             userBoard.add(hitView, column, row);
+        }
+    }
+    private void showFireImage(int column, int row, int player) {
+        ImageView fireView = new ImageView(fireImage);
+        fireView.setFitWidth(23.5);
+        fireView.setFitHeight(22.3);
+        if (player == 1) {
+            computerBoard.add(fireView, column, row);
+        } else {
+            userBoard.add(fireView, column, row);
         }
     }
 
