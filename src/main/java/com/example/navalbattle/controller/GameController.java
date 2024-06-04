@@ -245,7 +245,8 @@ public class GameController {
                     playerAttack();
 
                 } else {
-                    System.out.println("You already shot here");
+                    AlertBox alertBox = new AlertBox();
+                    alertBox.showMessage("Error", "YA DISPARASTE AHI");
                 }
                 break;
             case 2:
