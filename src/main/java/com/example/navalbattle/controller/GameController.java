@@ -79,7 +79,7 @@ public class GameController {
     @FXML
     void onButtonPressedStartGame(ActionEvent event) throws NoBoatsPlacedException {
         try {
-            if (frigatesNum.getText() != "0" || destructorsNum.getText() != "0" || submarinesNum.getText() != "0" || aircraftCarrierNum.getText() != "0") {
+            if (!frigatesNum.getText().equals("0") || !destructorsNum.getText().equals("0") || !submarinesNum.getText().equals("0") || !aircraftCarrierNum.getText().equals("0")) {
                 throw new NoBoatsPlacedException("You must place all boats before starting the game");
             }
             elementsToKeep.add(userBoard);
@@ -202,17 +202,13 @@ public class GameController {
 
     private void onKeyPressed(GridPane userBoard, int column, int row, Boat boat){
         userBoard.setOnKeyPressed(event -> {
-            try {
+            if (event.getCode() == KeyCode.R) {
                 if (row == 9 || column == 9) {
-                    throw new OutOfBondsException("The boat can not be rotated");
+                    AlertBox alertBox = new AlertBox();
+                    alertBox.showMessage("Error", "Boat can not be rotated");
                 } else {
-                    if (event.getCode() == KeyCode.R) {
-                        boat.rotateBoat();
-                    }
+                    boat.rotateBoat();
                 }
-            } catch (OutOfBondsException e) {
-                AlertBox alertBox = new AlertBox();
-                alertBox.showMessage("Error", e.getMessage());
             }
 
             if (event.getCode() == KeyCode.ENTER) {

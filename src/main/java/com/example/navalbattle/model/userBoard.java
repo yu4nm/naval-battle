@@ -95,7 +95,7 @@ public class userBoard implements IBoard{
     boolean canPlaceBoat(int row, int col, Boat boat) throws OutOfBondsException, PositionOccupiedException{
         int boatLength = boat.getBoatLength();
         if (boat.getIsHorizontal()) {
-            if (col + boatLength > userBoard[0].length) {
+            if (col + boatLength > userBoard[0].length || row >= userBoard.length) {
                 throw new OutOfBondsException("Boat goes out of bounds horizontally");
             }
             for (int i = col; i < col + boatLength; i++) {
@@ -103,8 +103,9 @@ public class userBoard implements IBoard{
                     throw new PositionOccupiedException("Space is already occupied");
                 }
             }
-        } else {
-            if (row + boatLength > userBoard.length) {
+        }
+        else {
+            if (row + boatLength > userBoard.length || col >= userBoard[0].length) {
                 throw new OutOfBondsException("Boat goes out of bounds vertically");
             }
             for (int j = row; j < row + boatLength; j++) {
