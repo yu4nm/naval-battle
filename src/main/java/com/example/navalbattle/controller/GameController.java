@@ -1,11 +1,13 @@
 package com.example.navalbattle.controller;
 
 import com.example.navalbattle.model.Boat;
+import com.example.navalbattle.model.BoatDrawing;
 import com.example.navalbattle.model.ComputerBoard;
 import com.example.navalbattle.model.userBoard;
 import com.example.navalbattle.view.alert.AlertBox;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -104,38 +106,38 @@ public class GameController {
         playerAttack();
 
     }
-    void setUserBoats(int typeBoat){
-
+    void setUserBoats(int typeBoat) {
         Boat boat = new Boat(typeBoat);
-        Rectangle boatPreview = boat.getBoat();
-        boatPreview.setOpacity(0.5);
-        userBoard.add(boatPreview,4,4);
+        BoatDrawing boatDrawing = new BoatDrawing(typeBoat);
+        Group boatGroup = boatDrawing.getBoatGroup();
+        boatGroup.setOpacity(0.5);
+        userBoard.add(boatGroup, 4, 4);
 
         userBoard.setOnMouseMoved(event -> {
             double mouseX = event.getX();
-            double mouseY = event.getY  ();
+            double mouseY = event.getY();
 
             int column = (int) (mouseX / (userBoard.getWidth() / userBoard.getColumnCount()));
             int row = (int) (mouseY / (userBoard.getHeight() / userBoard.getRowCount()));
 
+            GridPane.setColumnIndex(boatGroup, column);
+            GridPane.setRowIndex(boatGroup, row);
 
-            GridPane.setColumnIndex(boatPreview, column);
-            GridPane.setRowIndex(boatPreview, row);
-
-            if (userBoardM.getUserBoard()[row][column] != 0){
-                boatPreview.setFill(Color.RED);
+            if (userBoardM.getUserBoard()[row][column] != 0) {
+                boatGroup.setStyle("-fx-background-color: red;");
             }
 
-            onKeyPressed(userBoard, column, row, boat);
+            onKeyPressed(userBoard, column, row, boat, boatDrawing);
         });
 
         userBoard.requestFocus();
     }
 
-    private void onKeyPressed(GridPane userBoard, int column, int row, Boat boat){
+    private void onKeyPressed(GridPane userBoard, int column, int row, Boat boat, BoatDrawing boatDrawing){
         userBoard.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.R) {
                 boat.rotateBoat();
+                boatDrawing.rotateBoat(boat.getBoat().getWidth(), boat.getBoat().getHeight());
             }
             if (event.getCode() == KeyCode.ENTER) {
                 if (userBoardM.setBoatPosition(row, column, boat)){
