@@ -2,12 +2,14 @@ package com.example.navalbattle.model;
 
 import com.example.navalbattle.view.alert.AlertBox;
 
-public class userBoard implements IBoard{
+import java.io.Serializable;
+
+public class userBoard implements IBoard, Serializable {
 
 
     private int[][] userBoard = new int[10][10];
 
-    public userBoard(){
+    public userBoard (){
         initializeBoard(userBoard);
 
     }

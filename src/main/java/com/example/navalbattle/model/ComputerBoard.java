@@ -1,9 +1,10 @@
 package com.example.navalbattle.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ComputerBoard implements IBoard{
+public class ComputerBoard implements IBoard, Serializable {
     int frigatesCant = 4;
     int destructorsNum = 3;
     int submarinesNum = 2;
@@ -22,6 +23,9 @@ public class ComputerBoard implements IBoard{
 
         initializeBoard(computerBoard);
     }
+
+    public static void getChildren() {
+    };
 
     public void setComputerBoard() {
         for (int i = 0; i < boatsInventory.size(); i++) {

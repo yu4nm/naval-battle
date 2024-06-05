@@ -19,6 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -54,6 +55,12 @@ public class GameController {
     @FXML
     private Button atackButton;
 
+    @FXML
+    private Button saveGameButton;
+
+    @FXML
+    private Button loadGameButton;
+
     private Image hitImage, fireImage;
 
     @FXML
@@ -72,8 +79,6 @@ public class GameController {
         computerBoardM.setComputerBoard();
         computerBoardM.printUserTable(computerBoardM.getComputerBoard());
         atackButton.setVisible(true);
-
-
     }
 
     @FXML
@@ -102,6 +107,42 @@ public class GameController {
         playerAttack();
 
     }
+    // Métodos para guardar y cargar el estado del juego
+    @FXML
+    void onButtonPressedSaveGame (ActionEvent event) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("gameState.ser"))) {
+            out.writeObject(userBoardM);
+            out.writeObject(computerBoardM);
+            AlertBox alertBox = new AlertBox();
+            alertBox.showMessage("Guardado", "Juego guardado exitosamente");
+        } catch (IOException e) {
+            AlertBox alertBox = new AlertBox();
+            alertBox.showMessage("Error", "Error al guardar el juego");
+        }
+    }
+
+    @FXML
+    void onButtonPressedLoadGame(ActionEvent event) {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("gameState.ser"))) {
+            userBoardM = (userBoard) in.readObject();
+            computerBoardM = (ComputerBoard) in.readObject();
+            AlertBox alertBox = new AlertBox();
+            alertBox.showMessage("Logrado", "Juego cargado exitosamente");
+            // Update the UI with the loaded game state
+            updateUserBoard();
+            updateComputerBoard();
+        } catch (IOException | ClassNotFoundException e) {
+            AlertBox alertBox = new AlertBox();
+            alertBox.showMessage("Error", "Error al cargar el juego");
+        }
+    }
+
+    private void updateComputerBoard() {
+    }
+
+    private void updateUserBoard() {
+    }
+
 
     void setUserBoats(int typeBoat) {
 
@@ -177,13 +218,9 @@ public class GameController {
             int column = (int) (mouseX / (computerBoard.getWidth() / computerBoard.getColumnCount()));
             int row = (int) (mouseY / (computerBoard.getHeight() / computerBoard.getRowCount()));
 
-
-
-
             computerBoard.setOnMouseMoved(null);
             computerBoard.setOnMouseClicked(null);
             int player = 1;
-
 
             stateOfShots(column, row, computerBoardM.getComputerBoard(), player,userBoardM.getUserBoard());
             attackv.setOpacity(0);
@@ -193,22 +230,22 @@ public class GameController {
     }
     void computerAttack(){
         int player = 2;
-
         int randomAttackC = (int) (Math.random() * 10) ;
         int column = randomAttackC;
-
         int randomAttackR = (int) (Math.random() * 10) ;
         int row = randomAttackR;
 
         while(userBoardM.getUserBoard()[row][column] == 5){
             randomAttackC = (int) (Math.random() * 10);
             column = randomAttackC;
-
             randomAttackR = (int) (Math.random() * 10);
             row = randomAttackR;
         }
         stateOfShots(column, row, computerBoardM.getComputerBoard(), player, userBoardM.getUserBoard());
        // showHitImage(column, row, player);
+
+
+
     }
 
     public void previewBoat(int typeBoat, TextField boatCountField){
@@ -241,24 +278,43 @@ public class GameController {
                 if (computerBoard[row][column] == 0) {
                     computerBoard[row][column] = 5;
                     showHitImage(column, row, player);
+                    if (checkWinCondition(computerBoard)) {
+                        AlertBox alertBox = new AlertBox();
+                        alertBox.showMessage("Victoria", "¡Has ganado, buen trabajo!");
+                        return;
+                    }
                     computerAttack();
                 } else if (computerBoard[row][column] > 0 && computerBoard[row][column] < 5) {
                     computerBoard[row][column] = 5;
                     showFireImage(column, row, player);
+                    if (checkWinCondition(computerBoard)) {
+                        AlertBox alertBox = new AlertBox();
+                        alertBox.showMessage("Victoria", "¡Has ganado, buen trabajo!");
+                        return;
+                    }
                     playerAttack();
-
                 } else {
                     AlertBox alertBox = new AlertBox();
-                    alertBox.showMessage("Error", "YA DISPARASTE AHI");
+                    alertBox.showMessage("Error", "Ya disparaste ahí");
                 }
                 break;
             case 2:
                 if (userBoard[row][column] == 0) {
                     userBoard[row][column] = 5;
                     showHitImage(column, row, player);
+                    if (checkWinCondition(userBoard)) {
+                        AlertBox alertBox = new AlertBox();
+                        alertBox.showMessage("Derrota", "La computadora ha ganado.");
+                        return;
+                    }
                 } else if (userBoard[row][column] > 0 && userBoard[row][column] < 5) {
                     userBoard[row][column] = 5;
                     showFireImage(column, row, player);
+                    if (checkWinCondition(userBoard)) {
+                        AlertBox alertBox = new AlertBox();
+                        alertBox.showMessage("Derrota", "La computadora ha ganado.");
+                        return;
+                    }
                     computerAttack();
                 }
                 break;
@@ -285,7 +341,39 @@ public class GameController {
             userBoard.add(fireView, column, row);
         }
     }
+    private boolean checkWinCondition(int[][] board) {
+        for (int[] row : board) {
+            for (int cell : row) {
+                if (cell > 0 && cell < 5) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    private void resetGame() {
+        // Limpiar el tablero del jugador
+        for (Node node : userBoard.getChildren()) {
+            if (node instanceof Rectangle) {
+                ((Rectangle) node).setFill(Color.TRANSPARENT);
+            }
+        }
 
+        // Limpiar el tablero de la computadora
+        for (Node node : computerBoard.getChildren()) {
+            if (node instanceof Rectangle) {
+                ((Rectangle) node).setFill(Color.TRANSPARENT);
+            }
+        }
+
+        // Reiniciar los tableros de datos
+        userBoardM.initializeBoard(null);
+        computerBoardM.initializeBoard(null);
+
+        // Desactivar eventos de ratón para que no se pueda seguir jugando
+        computerBoard.setOnMouseMoved(null);
+        computerBoard.setOnMouseClicked(null);
+    }
     }
 
 

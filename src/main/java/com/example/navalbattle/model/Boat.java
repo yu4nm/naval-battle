@@ -3,7 +3,9 @@ package com.example.navalbattle.model;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class Boat {
+import java.io.Serializable;
+
+public class Boat implements Serializable {
 
     int boatLength;
     int typeBoat;
