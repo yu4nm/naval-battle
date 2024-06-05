@@ -7,7 +7,9 @@ import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 
-public class BoatDrawing {
+import java.io.Serializable;
+
+public class BoatDrawing implements Serializable {
     private Polygon boat;
     private int typeBoat;
     private boolean isHorizontal = true;

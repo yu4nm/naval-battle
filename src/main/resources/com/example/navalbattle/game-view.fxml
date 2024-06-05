@@ -70,15 +70,15 @@
             <Font name="Cambria Math" size="14.0" />
          </font>
       </Text>
-       <Button layoutX="41.0" layoutY="377.0" mnemonicParsing="false" onAction="#previewAircraftCarrier" prefHeight="25.0" prefWidth="90.0" style="-fx-background-color: D0D7F0;" text="Portaaviones" />
-      <Button layoutX="41.0" layoutY="416.0" mnemonicParsing="false" onAction="#previewSubmarine" prefHeight="25.0" prefWidth="90.0" style="-fx-background-color: D0D7F0;" text="Submarinos" />
-      <Button layoutX="188.0" layoutY="377.0" mnemonicParsing="false" onAction="#previewDestructor" prefHeight="25.0" prefWidth="90.0" style="-fx-background-color: D0D7F0;" text="Destructores" />
-      <Button layoutX="188.0" layoutY="416.0" mnemonicParsing="false" onAction="#PreviewFrigate" prefHeight="25.0" prefWidth="90.0" style="-fx-background-color: D0D7F0;" text="Fragatas" />
+       <Button fx:id="aircraftCarrier" layoutX="41.0" layoutY="377.0" mnemonicParsing="false" onAction="#previewAircraftCarrier" prefHeight="25.0" prefWidth="90.0" style="-fx-background-color: D0D7F0;" text="Portaaviones" />
+      <Button fx:id="submarine" layoutX="41.0" layoutY="416.0" mnemonicParsing="false" onAction="#previewSubmarine" prefHeight="25.0" prefWidth="90.0" style="-fx-background-color: D0D7F0;" text="Submarinos" />
+      <Button fx:id="destructor" layoutX="188.0" layoutY="377.0" mnemonicParsing="false" onAction="#previewDestructor" prefHeight="25.0" prefWidth="90.0" style="-fx-background-color: D0D7F0;" text="Destructores" />
+      <Button fx:id="frigate" layoutX="188.0" layoutY="416.0" mnemonicParsing="false" onAction="#PreviewFrigate" prefHeight="25.0" prefWidth="90.0" style="-fx-background-color: D0D7F0;" text="Fragatas" />
       <TextField fx:id="aircraftCarrierNum" alignment="CENTER" editable="false" layoutX="139.0" layoutY="377.0" prefHeight="25.0" prefWidth="37.0" text="1" />
       <TextField fx:id="submarinesNum" alignment="CENTER" editable="false" layoutX="139.0" layoutY="416.0" prefHeight="25.0" prefWidth="37.0" text="2" />
       <TextField fx:id="destructorsNum" alignment="CENTER" editable="false" layoutX="284.0" layoutY="377.0" prefHeight="25.0" prefWidth="37.0" text="3" />
       <TextField fx:id="frigatesNum" alignment="CENTER" editable="false" layoutX="284.0" layoutY="416.0" prefHeight="25.0" prefWidth="37.0" text="4" />
-      <Button layoutX="467.0" layoutY="357.0" mnemonicParsing="false" onAction="#onButtonPressedStartGame" style="-fx-background-color: D0D7F0;" text="COMENZAR" />
+      <Button fx:id="startGame" layoutX="467.0" layoutY="357.0" mnemonicParsing="false" onAction="#onButtonPressedStartGame" style="-fx-background-color: D0D7F0;" text="COMENZAR" />
       <Button fx:id="atackButton" layoutX="475.0" layoutY="355.0" mnemonicParsing="false" onAction="#onButtonPressedAttack" style="-fx-background-color: D0D7F0;" text="ATACAR" visible="false" />
       <Text fill="#6800ff" layoutX="163.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" text="B A T A L L A   N A V A L" wrappingWidth="380.0">
          <font>
@@ -95,7 +95,7 @@
             <Image url="@images/melodypirata.jpg" />
          </image>
       </ImageView>
-      <Button fx:id="saveGameButton" layoutX="488.0" layoutY="441.0" mnemonicParsing="false" style="-fx-background-color: A5B7F5;" text="Guardar Juego" />
-      <Button fx:id="loadGameButton" layoutX="588.0" layoutY="441.0" mnemonicParsing="false" style="-fx-background-color: A5B7F5;" text="Cargar Juego" />
+      <Button fx:id="saveGameButton" layoutX="488.0" layoutY="441.0" mnemonicParsing="false" onAction="#onButtonPressedSaveGame" style="-fx-background-color: A5B7F5;" text="Guardar Juego" />
+      <Button fx:id="loadGameButton" layoutX="588.0" layoutY="441.0" mnemonicParsing="false" onAction="#onButtonPressedLoadGame" style="-fx-background-color: A5B7F5;" text="Cargar Juego" />
    </children>
 </Pane>

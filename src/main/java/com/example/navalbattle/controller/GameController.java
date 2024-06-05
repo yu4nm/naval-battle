@@ -4,7 +4,9 @@ import com.example.navalbattle.model.Boat;
 import com.example.navalbattle.model.BoatDrawing;
 import com.example.navalbattle.model.ComputerBoard;
 import com.example.navalbattle.model.userBoard;
+import com.example.navalbattle.view.GameStage;
 import com.example.navalbattle.view.alert.AlertBox;
+import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -18,10 +20,13 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static java.lang.Integer.parseInt;
 
@@ -61,12 +66,30 @@ public class GameController {
     @FXML
     private Button loadGameButton;
 
+    @FXML
+    private Button aircraftCarrier;
+
+    @FXML
+    private Button submarine;
+
+    @FXML
+    private Button destructor;
+
+    @FXML
+    private Button frigate;
+
+    @FXML
+    private Button startGame;
+
     private Image hitImage, fireImage;
+
+
 
     @FXML
     void initialize() {
         fireImage = new Image(getClass().getResource("/com/example/navalbattle/images/fire.png").toExternalForm());
         hitImage = new Image(getClass().getResource("/com/example/navalbattle/images/hit.png").toExternalForm());
+
     }
 
     @FXML
@@ -80,12 +103,10 @@ public class GameController {
         computerBoardM.printUserTable(computerBoardM.getComputerBoard());
         atackButton.setVisible(true);
     }
-
     @FXML
     void PreviewFrigate(ActionEvent event) {
         previewBoat(1, frigatesNum);
     }
-
 
     @FXML
     void previewDestructor(ActionEvent event) {
@@ -107,42 +128,129 @@ public class GameController {
         playerAttack();
 
     }
+
     // Métodos para guardar y cargar el estado del juego
     @FXML
-    void onButtonPressedSaveGame (ActionEvent event) {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("gameState.ser"))) {
+    void onButtonPressedSaveGame(ActionEvent event) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("C:/Users/Valu/IdeaProjects/naval-battle/src/main/java/com/example/navalbattle/controller/gameState.ser"))) {
             out.writeObject(userBoardM);
             out.writeObject(computerBoardM);
             AlertBox alertBox = new AlertBox();
             alertBox.showMessage("Guardado", "Juego guardado exitosamente");
+
         } catch (IOException e) {
             AlertBox alertBox = new AlertBox();
             alertBox.showMessage("Error", "Error al guardar el juego");
         }
+
     }
 
-    @FXML
-    void onButtonPressedLoadGame(ActionEvent event) {
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("gameState.ser"))) {
-            userBoardM = (userBoard) in.readObject();
-            computerBoardM = (ComputerBoard) in.readObject();
-            AlertBox alertBox = new AlertBox();
-            alertBox.showMessage("Logrado", "Juego cargado exitosamente");
-            // Update the UI with the loaded game state
-            updateUserBoard();
-            updateComputerBoard();
-        } catch (IOException | ClassNotFoundException e) {
-            AlertBox alertBox = new AlertBox();
-            alertBox.showMessage("Error", "Error al cargar el juego");
+ @FXML
+void onButtonPressedLoadGame(ActionEvent event) {
+     try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("C:/Users/Valu/IdeaProjects/naval-battle/src/main/java/com/example/navalbattle/controller/gameState.ser"))) {
+         userBoardM = (userBoard) in.readObject();
+         computerBoardM = (ComputerBoard) in.readObject();
+         AlertBox alertBox = new AlertBox();
+         alertBox.showMessage("Logrado", "Juego cargado exitosamente");
+         updateBoards();
+         removeShipButtons();
+         mainWindow.getChildren().removeAll(
+                 frigatesNum, destructorsNum, aircraftCarrierNum, submarinesNum);
+
+         drawBoatsOnBoard(userBoardM.getUserBoard(), userBoard);
+         drawBoatsOnBoard(computerBoardM.getComputerBoard(), computerBoard);
+     } catch (IOException | ClassNotFoundException e) {
+         AlertBox alertBox = new AlertBox();
+         alertBox.showMessage("Error", "Error al cargar el juego");
+     }
+
+ }
+
+    private void removeShipButtons() {
+        submarine.setVisible(false);
+        aircraftCarrier.setVisible(false);
+        frigate.setVisible(false);
+        destructor.setVisible(false);
+    }
+
+    private void drawBoatsOnBoard(int[][] board, GridPane gridPane) {
+        boolean[][] visited = new boolean[board.length][board[0].length];
+
+        for (int row = 0; row < board.length; row++) {
+            for (int column = 0; column < board[row].length; column++) {
+                if (!visited[row][column] && board[row][column] > 0 && board[row][column] < 5) {
+                    int typeBoat = board[row][column];
+                    BoatDrawing boatDrawing = new BoatDrawing(typeBoat);
+                    Polygon boat = boatDrawing.getBoat();
+                    boat.setOpacity(1.0);  // Set opacity to fully visible
+
+                    int boatLength = getBoatLength(typeBoat);
+                    boolean isVertical = isBoatVertical(board, row, column, boatLength);
+
+                    if (isVertical) {
+                        boatDrawing.rotateBoat(boat.getBoundsInLocal().getWidth(), boat.getBoundsInLocal().getHeight());
+                    }
+
+                    gridPane.add(boat, column, row);
+
+                    for (int i = 0; i < boatLength; i++) {
+                        if (isVertical) {
+                            visited[row + i][column] = true;
+                        } else {
+                            visited[row][column + i] = true;
+                        }
+                    }
+                }
+            }
         }
     }
 
-    private void updateComputerBoard() {
+    private boolean isBoatVertical(int[][] board, int startRow, int startColumn, int boatLength) {
+        for (int i = 1; i < boatLength; i++) {
+            if (startRow + i >= board.length || board[startRow + i][startColumn] != board[startRow][startColumn]) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    private void updateUserBoard() {
+    private int getBoatLength(int typeBoat) {
+        switch (typeBoat) {
+            case 1: return 2;  // Frigate length is 2
+            case 2: return 3;  // Destructor length is 3
+            case 3: return 3;  // Submarine length is 3
+            case 4: return 4;  // Aircraft Carrier length is 4
+            default: return 0;
+        }
+    }
+    void updateComputerBoard(int[][] newComputerBoard) {
+        for (Node node : computerBoard.getChildren()) {
+            if (node instanceof Rectangle) {
+                int column = GridPane.getColumnIndex(node);
+                int row = GridPane.getRowIndex(node);
+                if (newComputerBoard[row][column] == 5) {
+                    ((Rectangle) node).setFill(Color.RED);
+                }
+            }
+        }
     }
 
+    void updateUserBoard(int[][] newUserBoard) {
+        for (Node node : userBoard.getChildren()) {
+            if (node instanceof Rectangle) {
+                int column = GridPane.getColumnIndex(node);
+                int row = GridPane.getRowIndex(node);
+                if (newUserBoard[row][column] == 5) {
+                    ((Rectangle) node).setFill(Color.RED);
+                }
+            }
+        }
+    }
+
+    private void updateBoards() {
+        updateComputerBoard(computerBoardM.getComputerBoard());
+        updateUserBoard(userBoardM.getUserBoard());
+    }
 
     void setUserBoats(int typeBoat) {
 
