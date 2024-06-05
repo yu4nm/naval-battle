@@ -5,7 +5,6 @@ import javafx.scene.shape.Rectangle;
 
 public class Boat {
 
-    boolean isPreview = false;
     int boatLength;
     int typeBoat;
     Rectangle boat;

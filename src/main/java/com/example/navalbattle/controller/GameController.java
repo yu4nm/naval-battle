@@ -1,6 +1,7 @@
 package com.example.navalbattle.controller;
 
 import com.example.navalbattle.model.Boat;
+import com.example.navalbattle.model.BoatDrawing;
 import com.example.navalbattle.model.ComputerBoard;
 import com.example.navalbattle.model.userBoard;
 import com.example.navalbattle.view.alert.AlertBox;
@@ -15,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
@@ -23,12 +25,10 @@ import java.util.Collection;
 import static java.lang.Integer.parseInt;
 
 public class GameController {
-
     Collection<Node> elementsToKeep = new ArrayList<>();
 
     userBoard userBoardM = new userBoard();
     ComputerBoard computerBoardM = new ComputerBoard();
-
 
     @FXML
     private Pane mainWindow;
@@ -106,13 +106,10 @@ public class GameController {
     void setUserBoats(int typeBoat) {
 
         Boat boat = new Boat(typeBoat);
-        Rectangle boatPreview = boat.getBoat();
+        BoatDrawing boatDrawing = new BoatDrawing(typeBoat);
+        Polygon boatPreview = boatDrawing.getBoat();
         boatPreview.setOpacity(0.5);
         userBoard.add(boatPreview, 4, 4);
-
-        userBoard.setOnMouseExited(event -> {
-            userBoard.getChildren().remove(boatPreview);
-        });
 
         userBoard.setOnMouseMoved(event -> {
             double mouseX = event.getX();
@@ -130,28 +127,29 @@ public class GameController {
                 boatPreview.setFill(boat.getColorByTypeBoat(typeBoat));
             }
 
-            onKeyPressed(userBoard, column, row, boat);
+            onKeyPressed(userBoard, column, row, boat, boatDrawing);
         });
 
         userBoard.requestFocus();
     }
 
-    private void onKeyPressed(GridPane userBoard, int column, int row, Boat boat) {
-
+    private void onKeyPressed(GridPane userBoard, int column, int row, Boat boat, BoatDrawing boatDrawing){
         userBoard.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.R) {
                 boat.rotateBoat();
+                boatDrawing.rotateBoat(boat.getBoat().getWidth(), boat.getBoat().getHeight());
             }
             if (event.getCode() == KeyCode.ENTER) {
                 if (userBoardM.setBoatPosition(row, column, boat)) {
                     userBoardM.printUserTable(userBoardM.getUserBoard());
-                    boat.getBoat().setOpacity(1.0);
+                    boatDrawing.getBoat().setOpacity(1.0);
                     userBoard.setOnMouseMoved(null);
                     userBoard.setOnKeyPressed(null);
                     decreaseBoatCount(boat.getTypeBoat());
                 }
             }
         });
+
     }
 
     void playerAttack(){
@@ -188,7 +186,7 @@ public class GameController {
 
 
             stateOfShots(column, row, computerBoardM.getComputerBoard(), player,userBoardM.getUserBoard());
-
+            attackv.setOpacity(0);
 
 
         });
@@ -210,7 +208,7 @@ public class GameController {
             row = randomAttackR;
         }
         stateOfShots(column, row, computerBoardM.getComputerBoard(), player, userBoardM.getUserBoard());
-        showHitImage(column, row, player);
+       // showHitImage(column, row, player);
     }
 
     public void previewBoat(int typeBoat, TextField boatCountField){
@@ -238,34 +236,32 @@ public class GameController {
         }
     }
     public void stateOfShots(int column, int row, int[][] computerBoard, int player, int[][] userBoard) {
-        switch (player){
+        switch (player) {
             case 1:
-                if((computerBoardM.getComputerBoard()[row][column]) == 0){
+                if (computerBoard[row][column] == 0) {
                     computerBoard[row][column] = 5;
-                    showHitImage(column,row, player);
+                    showHitImage(column, row, player);
                     computerAttack();
+                } else if (computerBoard[row][column] > 0 && computerBoard[row][column] < 5) {
+                    computerBoard[row][column] = 5;
+                    showFireImage(column, row, player);
+                    playerAttack();
 
-
-                }else if((computerBoardM.getComputerBoard()[row][column]) > 0 && computerBoardM.getComputerBoard()[row][column] < 5){
-                    showFireImage(column,row,player);
-                    computerAttack();
+                } else {
+                    AlertBox alertBox = new AlertBox();
+                    alertBox.showMessage("Error", "YA DISPARASTE AHI");
                 }
-                else{
-                    System.out.println("ya disparaste ahi");
-                }
-
+                break;
             case 2:
-                if((userBoardM.getUserBoard()[row][column]) == 0){
+                if (userBoard[row][column] == 0) {
                     userBoard[row][column] = 5;
-                    showHitImage(column,row, player);
-
-
-
-                }else if((userBoardM.getUserBoard()[row][column]) > 0 && userBoardM.getUserBoard()[row][column] < 5){
-                    showFireImage(column,row,player);
+                    showHitImage(column, row, player);
+                } else if (userBoard[row][column] > 0 && userBoard[row][column] < 5) {
+                    userBoard[row][column] = 5;
+                    showFireImage(column, row, player);
+                    computerAttack();
                 }
-
-
+                break;
         }
 
     }
@@ -289,6 +285,7 @@ public class GameController {
             userBoard.add(fireView, column, row);
         }
     }
-}
+
+    }
 
 
