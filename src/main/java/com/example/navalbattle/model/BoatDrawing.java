@@ -8,13 +8,12 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 
 public class BoatDrawing {
-    private Group boatGroup;
+    private Polygon boat;
     private int typeBoat;
     private boolean isHorizontal = true;
 
 
     public BoatDrawing(int typeBoat) {
-            boatGroup = new Group();
             switch (typeBoat) {
                 case 1:
                     createFrigate();
@@ -42,8 +41,8 @@ public class BoatDrawing {
 
             frig.setFill(Color.PALEGREEN);
             frig.setStroke(Color.BLACK);
+            boat = frig;
 
-            boatGroup.getChildren().addAll(frig);
         }
 
         private void createDestructor() {
@@ -57,8 +56,7 @@ public class BoatDrawing {
 
             destr.setFill(Color.SILVER);
             destr.setStroke(Color.BLACK);
-
-            boatGroup.getChildren().addAll(destr);
+            boat = destr;
         }
 
         private void createSubmarine() {
@@ -77,9 +75,8 @@ public class BoatDrawing {
 
             submari.setFill(Color.BLUEVIOLET);
             submari.setStroke(Color.BLACK);
-
-            boatGroup.getChildren().addAll(submari);
-        }
+            boat = submari;
+     }
 
         private void createAircraftCarrier() {
             Polygon aircarrier = new Polygon(
@@ -95,22 +92,24 @@ public class BoatDrawing {
             aircarrier.setFill(Color.GOLD);
             aircarrier.setStroke(Color.BLACK);
 
-            boatGroup.getChildren().addAll(aircarrier);
+            boat = aircarrier;
         }
 
-        public Group getBoatGroup() {
-            return boatGroup;
-        }
+    public Polygon getBoat() {
+        return boat;
+    }
+
+
     public void rotateBoat(double width, double height) {
         isHorizontal = !isHorizontal;
         if (isHorizontal) {
-            boatGroup.setRotate(0);
-            boatGroup.setTranslateX(0);
-            boatGroup.setTranslateY(0);
+            boat.setRotate(0);
+            boat.setTranslateX(0);
+            boat.setTranslateY(0);
         } else {
-            boatGroup.setRotate(90);
-            boatGroup.setTranslateX((height - width) / 2);
-            boatGroup.setTranslateY((width - height) / 2);
+            boat.setRotate(90);
+            boat.setTranslateX((height - width) / 2);
+            boat.setTranslateY((width - height) / 2);
         }
     }
 }

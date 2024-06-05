@@ -66,4 +66,21 @@ public class Boat {
             this.isHorizontal = false;
         }
     }
+
+
+
+    public Color getColorByTypeBoat(int typeBoat) {
+        switch (typeBoat) {
+            case 1: //Frigate
+                return Color.PALEGREEN;
+            case 2: //Destructor
+                return Color.SILVER;
+            case 3: //Submarine
+                return Color.BLUEVIOLET;
+            case 4: //Aircraft Carrier
+                return Color.GOLD;
+            default:
+                return null;
+        }
+    }
 }

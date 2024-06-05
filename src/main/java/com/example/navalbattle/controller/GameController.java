@@ -7,7 +7,6 @@ import com.example.navalbattle.model.userBoard;
 import com.example.navalbattle.view.alert.AlertBox;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -17,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
@@ -71,14 +71,10 @@ public class GameController {
         computerBoard.setVisible(true);
         computerBoardM.setComputerBoard();
         computerBoardM.printUserTable(computerBoardM.getComputerBoard());
-//        computerBoardM.printUserTable(computerBoardM.getComputerBoard());
         atackButton.setVisible(true);
 
 
     }
-
-    // General note: fix problem on double click at the buttons
-    // General note: fix bug when you try to put a boat outside the GridPane
 
     @FXML
     void PreviewFrigate(ActionEvent event) {
@@ -102,16 +98,18 @@ public class GameController {
     }
 
     @FXML
-    void onButtonPressedAtack(ActionEvent event) {
+    void onButtonPressedAttack(ActionEvent event) {
         playerAttack();
 
     }
+
     void setUserBoats(int typeBoat) {
+
         Boat boat = new Boat(typeBoat);
         BoatDrawing boatDrawing = new BoatDrawing(typeBoat);
-        Group boatGroup = boatDrawing.getBoatGroup();
-        boatGroup.setOpacity(0.5);
-        userBoard.add(boatGroup, 4, 4);
+        Polygon boatPreview = boatDrawing.getBoat();
+        boatPreview.setOpacity(0.5);
+        userBoard.add(boatPreview, 4, 4);
 
         userBoard.setOnMouseMoved(event -> {
             double mouseX = event.getX();
@@ -120,11 +118,13 @@ public class GameController {
             int column = (int) (mouseX / (userBoard.getWidth() / userBoard.getColumnCount()));
             int row = (int) (mouseY / (userBoard.getHeight() / userBoard.getRowCount()));
 
-            GridPane.setColumnIndex(boatGroup, column);
-            GridPane.setRowIndex(boatGroup, row);
+            GridPane.setColumnIndex(boatPreview, column);
+            GridPane.setRowIndex(boatPreview, row);
 
-            if (userBoardM.getUserBoard()[row][column] != 0) {
-                boatGroup.setStyle("-fx-background-color: red;");
+            if (userBoardM.overlappedBoat(boat, column, row)) {
+                boatPreview.setFill(Color.RED);
+            } else {
+                boatPreview.setFill(boat.getColorByTypeBoat(typeBoat));
             }
 
             onKeyPressed(userBoard, column, row, boat, boatDrawing);
@@ -140,17 +140,18 @@ public class GameController {
                 boatDrawing.rotateBoat(boat.getBoat().getWidth(), boat.getBoat().getHeight());
             }
             if (event.getCode() == KeyCode.ENTER) {
-                if (userBoardM.setBoatPosition(row, column, boat)){
+                if (userBoardM.setBoatPosition(row, column, boat)) {
                     userBoardM.printUserTable(userBoardM.getUserBoard());
-                    boat.getBoat().setOpacity(1.0);
+                    boatDrawing.getBoat().setOpacity(1.0);
                     userBoard.setOnMouseMoved(null);
                     userBoard.setOnKeyPressed(null);
-                    decreaseBoatCount(boat.getTypeBoat(), userBoard);
+                    decreaseBoatCount(boat.getTypeBoat());
                 }
             }
         });
 
     }
+
     void playerAttack(){
         Rectangle attackv;
         attackv = new Rectangle(23.5, 22.3);
@@ -220,7 +221,7 @@ public class GameController {
         }
     }
 
-    public void decreaseBoatCount(int typeBoat, GridPane gridPane){
+    public void decreaseBoatCount(int typeBoat){
         TextField textField = switch (typeBoat) {
             case 1 -> frigatesNum;
             case 2 -> destructorsNum;
@@ -262,6 +263,7 @@ public class GameController {
                 }
                 break;
         }
+
     }
     private void showHitImage(int column, int row, int player) {
         ImageView hitView = new ImageView(hitImage);

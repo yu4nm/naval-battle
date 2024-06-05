@@ -3,6 +3,8 @@ package com.example.navalbattle.model;
 import com.example.navalbattle.view.alert.AlertBox;
 
 public class userBoard implements IBoard{
+
+
     private int[][] userBoard = new int[10][10];
 
     public userBoard(){
@@ -23,6 +25,25 @@ public class userBoard implements IBoard{
         return false;
     }
 
+    public boolean overlappedBoat(Boat boat, int column, int row) {
+        userBoard = getUserBoard();
+        if (boat.getIsHorizontal()) {
+            for (int i = column; i < column + boat.getBoatLength(); i++) {
+                if (i < userBoard[0].length && row < userBoard.length && userBoard[row][i] != 0) {
+                    return true;
+                }
+            }
+        }
+        else {
+            for (int i = row; i < row + boat.getBoatLength(); i++) {
+                if (i < userBoard.length && column < userBoard[0].length && userBoard[i][column] != 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public int[][] getUserBoard() {
         return userBoard;
     }
@@ -34,7 +55,7 @@ public class userBoard implements IBoard{
                 throw new OutOfBondsException("Boat goes out of bounds horizontally");
             }
             for (int i = col; i < col + boatLength; i++) {
-                if (userBoard[row][i] != 0) {
+                if (i < userBoard[0].length && userBoard[row][i] != 0) {
                     throw new PositionOccupiedException("Space is already occupied");
                 }
             }
@@ -43,7 +64,7 @@ public class userBoard implements IBoard{
                 throw new OutOfBondsException("Boat goes out of bounds vertically");
             }
             for (int j = row; j < row + boatLength; j++) {
-                if (userBoard[j][col] != 0) {
+                if (j < userBoard.length && userBoard[j][col] != 0) {
                     throw  new PositionOccupiedException("Space is already occupied");
                 }
             }
