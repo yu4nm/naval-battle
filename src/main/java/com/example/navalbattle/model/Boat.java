@@ -5,6 +5,7 @@ import javafx.scene.shape.Rectangle;
 
 public class Boat {
 
+    boolean isPreview = false;
     int boatLength;
     int typeBoat;
     Rectangle boat;
@@ -64,6 +65,23 @@ public class Boat {
             this.isHorizontal = true;
         } else if (isHorizontal == 0) {
             this.isHorizontal = false;
+        }
+    }
+
+
+
+    public Color getColorByTypeBoat(int typeBoat) {
+        switch (typeBoat) {
+            case 1: //Frigate
+                return Color.PALEGREEN;
+            case 2: //Destructor
+                return Color.SILVER;
+            case 3: //Submarine
+                return Color.BLUEVIOLET;
+            case 4: //Aircraft Carrier
+                return Color.GOLD;
+            default:
+                return null;
         }
     }
 }

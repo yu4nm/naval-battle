@@ -23,10 +23,12 @@ import java.util.Collection;
 import static java.lang.Integer.parseInt;
 
 public class GameController {
+
     Collection<Node> elementsToKeep = new ArrayList<>();
 
     userBoard userBoardM = new userBoard();
     ComputerBoard computerBoardM = new ComputerBoard();
+
 
     @FXML
     private Pane mainWindow;
@@ -69,14 +71,10 @@ public class GameController {
         computerBoard.setVisible(true);
         computerBoardM.setComputerBoard();
         computerBoardM.printUserTable(computerBoardM.getComputerBoard());
-//        computerBoardM.printUserTable(computerBoardM.getComputerBoard());
         atackButton.setVisible(true);
 
 
     }
-
-    // General note: fix problem on double click at the buttons
-    // General note: fix bug when you try to put a boat outside the GridPane
 
     @FXML
     void PreviewFrigate(ActionEvent event) {
@@ -100,30 +98,36 @@ public class GameController {
     }
 
     @FXML
-    void onButtonPressedAtack(ActionEvent event) {
+    void onButtonPressedAttack(ActionEvent event) {
         playerAttack();
 
     }
-    void setUserBoats(int typeBoat){
+
+    void setUserBoats(int typeBoat) {
 
         Boat boat = new Boat(typeBoat);
         Rectangle boatPreview = boat.getBoat();
         boatPreview.setOpacity(0.5);
-        userBoard.add(boatPreview,4,4);
+        userBoard.add(boatPreview, 4, 4);
+
+        userBoard.setOnMouseExited(event -> {
+            userBoard.getChildren().remove(boatPreview);
+        });
 
         userBoard.setOnMouseMoved(event -> {
             double mouseX = event.getX();
-            double mouseY = event.getY  ();
+            double mouseY = event.getY();
 
             int column = (int) (mouseX / (userBoard.getWidth() / userBoard.getColumnCount()));
             int row = (int) (mouseY / (userBoard.getHeight() / userBoard.getRowCount()));
 
-
             GridPane.setColumnIndex(boatPreview, column);
             GridPane.setRowIndex(boatPreview, row);
 
-            if (userBoardM.getUserBoard()[row][column] != 0){
+            if (userBoardM.overlappedBoat(boat, column, row)) {
                 boatPreview.setFill(Color.RED);
+            } else {
+                boatPreview.setFill(boat.getColorByTypeBoat(typeBoat));
             }
 
             onKeyPressed(userBoard, column, row, boat);
@@ -132,23 +136,24 @@ public class GameController {
         userBoard.requestFocus();
     }
 
-    private void onKeyPressed(GridPane userBoard, int column, int row, Boat boat){
+    private void onKeyPressed(GridPane userBoard, int column, int row, Boat boat) {
+
         userBoard.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.R) {
                 boat.rotateBoat();
             }
             if (event.getCode() == KeyCode.ENTER) {
-                if (userBoardM.setBoatPosition(row, column, boat)){
+                if (userBoardM.setBoatPosition(row, column, boat)) {
                     userBoardM.printUserTable(userBoardM.getUserBoard());
                     boat.getBoat().setOpacity(1.0);
                     userBoard.setOnMouseMoved(null);
                     userBoard.setOnKeyPressed(null);
-                    decreaseBoatCount(boat.getTypeBoat(), userBoard);
+                    decreaseBoatCount(boat.getTypeBoat());
                 }
             }
         });
-
     }
+
     void playerAttack(){
         Rectangle attackv;
         attackv = new Rectangle(23.5, 22.3);
@@ -218,7 +223,7 @@ public class GameController {
         }
     }
 
-    public void decreaseBoatCount(int typeBoat, GridPane gridPane){
+    public void decreaseBoatCount(int typeBoat){
         TextField textField = switch (typeBoat) {
             case 1 -> frigatesNum;
             case 2 -> destructorsNum;
@@ -261,7 +266,6 @@ public class GameController {
                 }
 
 
-
         }
 
     }
@@ -285,7 +289,6 @@ public class GameController {
             userBoard.add(fireView, column, row);
         }
     }
-
-    }
+}
 
 
