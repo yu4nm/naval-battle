@@ -201,4 +201,5 @@ public class Boat {
     public boolean getIsHorizontal() {
         return isHorizontal;
     }
+
 }

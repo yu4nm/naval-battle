@@ -33,4 +33,6 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
         GameStage.getInstance();
     }
+
 }
+

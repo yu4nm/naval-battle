@@ -124,6 +124,7 @@ public class GameController {
             computerBoardM.setComputerBoard();
             computerBoardM.printBoard(computerBoardM.getComputerBoard());
             atackButton.setVisible(true);
+            System.out.println("lol");
 
         } catch (NoBoatsPlacedException e) {
             AlertBox alertBox = new AlertBox();
