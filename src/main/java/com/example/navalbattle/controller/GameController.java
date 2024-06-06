@@ -248,7 +248,7 @@ void onButtonPressedLoadGame(ActionEvent event) {
                     boolean isVertical = isBoatVertical(board, row, column, boatLength);
 
                     if (isVertical) {
-                        boatDrawing.rotateBoat(boat.getBoundsInLocal().getWidth(), boat.getBoundsInLocal().getHeight());
+                        boatDrawing.rotateBoat();
                     }
 
                     gridPane.add(boat, column, row);
@@ -372,7 +372,7 @@ void onButtonPressedLoadGame(ActionEvent event) {
 
             if (event.getCode() == KeyCode.ENTER) {
                 if (userBoardM.setBoatPosition(row, column, boat)) {
-                    userBoardM.printBoard(userBoardM.getUserBoard());
+                   // userBoardM.printBoard(userBoardM.getUserBoard());
                     boat.getBoatDrawing().setOpacity(1.0);
                    // userBoardM.printUserTable(userBoardM.getUserBoard());
                     userBoard.setOnMouseMoved(null);
