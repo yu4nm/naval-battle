@@ -290,7 +290,7 @@ void onButtonPressedLoadGame(ActionEvent event) {
             }
             if (event.getCode() == KeyCode.ENTER) {
                 if (userBoardM.setBoatPosition(row, column, boat)) {
-                    userBoardM.printUserTable(userBoardM.getUserBoard());
+                   // userBoardM.printUserTable(userBoardM.getUserBoard());
                     boatDrawing.getBoat().setOpacity(1.0);
                     userBoard.setOnMouseMoved(null);
                     userBoard.setOnKeyPressed(null);
