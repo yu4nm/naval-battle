@@ -311,6 +311,7 @@ void onButtonPressedLoadGame(ActionEvent event) {
     private void updateBoards() {
         updateComputerBoard(computerBoardM.getComputerBoard());
         updateUserBoard(userBoardM.getUserBoard());
+        System.out.println("Prueba");
     }
 
     /**
